@@ -1,0 +1,85 @@
+<html>
+    <head>
+
+    </head>
+    <body>
+        <ul data-index="index" id="list">
+            <li id="comments">Поставь лайк!<button id="likeButton">Лайк</button></li>
+            <li id="comments">Мне тоже поставь лайк!<button id="likeButton">Лайк</button></li>
+        </ul>
+
+        <div>
+            <p data-index="index">Добавьте новый коментарий</p>
+            <input type= text id= "field">
+            <button type="button" id="add">Добавить</button>
+        </div>
+
+        <script>
+            const button = document.getElementById("add");
+            const list = document.getElementById("list");
+            let likeButton = document.getElementById("likeButton");
+            const input = document.getElementById("field");
+            
+
+            let comments = [{text: "Поставь лайк",islike: false,likeSum:0},
+                    {text: "Мне тоже поставь лайк",islike: false,likeSum:0}]
+
+            const initClickComments = () => {
+                initClickComments = document.querySelectorAll("li");
+
+                for (let likeButtonElement of likeButtonsElement) {
+                    commentElement.addEventListener("click", () => {
+                    console.log(commentElement.dataset.index);
+                })
+                } 
+            }
+
+            const renderComments = () => {
+                const commentsHtml = comments.map((comments, index) => {
+                    return `<li id="comments">${comments.text}<button data-index="${index}" id="likeButton">Лайк</button></li>`;
+                }).join("");
+
+                list.innerHTML = commentsHtml;
+
+                // initClickComments();
+            }
+        
+            renderComments();
+
+
+            button.addEventListener('click', () => {
+                const oldHtml = list.innerHTML;
+                comments.push({name: input.value});
+
+                renderComments();
+                list.innerHTML = oldHtml + `<li id="comments">${input.value}<button "id="likeButton">Лайк</button></li>`;
+                input.value = "";
+            });
+
+            document.addEventListener('click', ({target:likeButton}) => {
+             
+            });
+
+
+            likeButton = document.getElementById('likeButton');
+            let likeCount = 0;
+            likeButton.addEventListener('click', function() {
+                if (likeButton.classList.contains('liked')) {
+                    likeButton.classList.remove('liked');
+                    likeCount--;
+                } else 
+                {
+                    likeButton.classList.add('liked');
+                    likeCount++;
+                    likeButton.innerHTML = style="color: red";
+                }
+
+                likeButton.textContent = `Лайки: ${likeCount}`;
+                console.log(`Количество лайков: ${likeCount}`);
+            });
+
+
+        </script>
+
+    </body>
+</html>
