@@ -1,85 +1,60 @@
+<!DOCTYPE html>
 <html>
-    <head>
+<head>
+  <style>
+    .liked {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <div id="comments">
 
-    </head>
-    <body>
-        <ul data-index="index" id="list">
-            <li id="comments">Поставь лайк!<button id="likeButton">Лайк</button></li>
-            <li id="comments">Мне тоже поставь лайк!<button id="likeButton">Лайк</button></li>
-        </ul>
+  </div>
+  <button id="addComment">Добавить комментарий</button>
 
-        <div>
-            <p data-index="index">Добавьте новый коментарий</p>
-            <input type= text id= "field">
-            <button type="button" id="add">Добавить</button>
-        </div>
+  <script>
+    // Массив комментариев с предварительно сохраненной информацией
+    const comments = [
+      { text: 'Первый комментарий', liked: false },
+      { text: 'Второй комментарий', liked: true },
+      { text: 'Третий комментарий', liked: false }
+    ];
 
-        <script>
-            const button = document.getElementById("add");
-            const list = document.getElementById("list");
-            let likeButton = document.getElementById("likeButton");
-            const input = document.getElementById("field");
-            
+    // Функция рендеринга для отрисовки списка комментариев
+    function renderComments() {
+      const commentsDiv = document.getElementById('comments');
+      commentsDiv.innerHTML = '';
 
-            let comments = [{text: "Поставь лайк",islike: false,likeSum:0},
-                    {text: "Мне тоже поставь лайк",islike: false,likeSum:0}]
+      // Отрисовка каждого комментария
+      comments.forEach(comment => {
+        const commentDiv = document.createElement('div');
+        commentDiv.innerHTML = `
+          <span>${comment.text}</span>
+          <button class="${comment.liked ? 'liked' : ''}" data-index="${comments.indexOf(comment)}">Лайк</button>
+          <span>${comment.liked ? '1' : '0'}</span>
+        `;
+        commentsDiv.appendChild(commentDiv);
+      });
+    }
 
-            const initClickComments = () => {
-                initClickComments = document.querySelectorAll("li");
+    // Обработчик событий для кнопки лайка
+    document.addEventListener('click', event => {
+      if (event.target.tagName === 'BUTTON' && event.target.innerText === 'Лайк') {
+        const index = event.target.getAttribute('data-index');
+        comments[index].liked = !comments[index].liked;
+        renderComments();
+      }
+    });
 
-                for (let likeButtonElement of likeButtonsElement) {
-                    commentElement.addEventListener("click", () => {
-                    console.log(commentElement.dataset.index);
-                })
-                } 
-            }
+    // Обработчик событий для кнопки добавления нового комментария
+    document.getElementById('addComment').addEventListener('click', () => {
+      comments.push({ text: 'Новый комментарий', liked: false });
+      renderComments();
+    });
 
-            const renderComments = () => {
-                const commentsHtml = comments.map((comments, index) => {
-                    return `<li id="comments">${comments.text}<button data-index="${index}" id="likeButton">Лайк</button></li>`;
-                }).join("");
-
-                list.innerHTML = commentsHtml;
-
-                // initClickComments();
-            }
-        
-            renderComments();
-
-
-            button.addEventListener('click', () => {
-                const oldHtml = list.innerHTML;
-                comments.push({name: input.value});
-
-                renderComments();
-                list.innerHTML = oldHtml + `<li id="comments">${input.value}<button "id="likeButton">Лайк</button></li>`;
-                input.value = "";
-            });
-
-            document.addEventListener('click', ({target:likeButton}) => {
-             
-            });
-
-
-            likeButton = document.getElementById('likeButton');
-            let likeCount = 0;
-            likeButton.addEventListener('click', function() {
-                if (likeButton.classList.contains('liked')) {
-                    likeButton.classList.remove('liked');
-                    likeCount--;
-                } else 
-                {
-                    likeButton.classList.add('liked');
-                    likeCount++;
-                    likeButton.innerHTML = style="color: red";
-                }
-
-                likeButton.textContent = `Лайки: ${likeCount}`;
-                console.log(`Количество лайков: ${likeCount}`);
-            });
-
-
-        </script>
-
-    </body>
-</html>
+    // Первоначальная отрисовка списка комментариев
+    renderComments();
+  </script>
+</body>
+</html> 
