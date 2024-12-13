@@ -2,59 +2,52 @@
 <html>
 <head>
   <style>
-    .liked {
+   .liked {
       color: red;
     }
   </style>
 </head>
 <body>
   <div id="comments">
-
+    <ul id="list"></ul>
+    <input type="text" id="field">
+    <button type="button" id="add">Добавить</button>
   </div>
-  <button id="addComment">Добавить комментарий</button>
 
   <script>
-    // Массив комментариев с предварительно сохраненной информацией
-    const comments = [
-      { text: 'Первый комментарий', liked: false },
-      { text: 'Второй комментарий', liked: true },
-      { text: 'Третий комментарий', liked: false }
+    const button = document.getElementById("add");
+    let list = document.getElementById("list");
+    const input = document.getElementById("field");
+
+    let comments = [
+      { text: 'Поставь лайк', liked: false, likeSum: 0 },
+      { text: 'Мне тоже поставь лайк', liked: false, likeSum: 0 }
     ];
 
-    // Функция рендеринга для отрисовки списка комментариев
     function renderComments() {
-      const commentsDiv = document.getElementById('comments');
-      commentsDiv.innerHTML = '';
+      const commentsHtml = comments.map((comment, index) => {
+        return `<li id="comments">${comment.text}<button class="${comment.liked? 'liked' : ''}" data-index="${index}">Лайк</button><span>${comment.likeSum}</span></li>`;
+      }).join("");
 
-      // Отрисовка каждого комментария
-      comments.forEach(comment => {
-        const commentDiv = document.createElement('div');
-        commentDiv.innerHTML = `
-          <span>${comment.text}</span>
-          <button class="${comment.liked ? 'liked' : ''}" data-index="${comments.indexOf(comment)}">Лайк</button>
-          <span>${comment.liked ? '1' : '0'}</span>
-        `;
-        commentsDiv.appendChild(commentDiv);
-      });
+      list.innerHTML = commentsHtml;
     }
 
-    // Обработчик событий для кнопки лайка
     document.addEventListener('click', event => {
       if (event.target.tagName === 'BUTTON' && event.target.innerText === 'Лайк') {
         const index = event.target.getAttribute('data-index');
-        comments[index].liked = !comments[index].liked;
+        comments[index].liked =!comments[index].liked;
+        comments[index].liked? comments[index].likeSum++ : comments[index].likeSum--;
         renderComments();
       }
     });
 
-    // Обработчик событий для кнопки добавления нового комментария
-    document.getElementById('addComment').addEventListener('click', () => {
-      comments.push({ text: 'Новый комментарий', liked: false });
+    button.addEventListener('click', () => {
+      comments.push({ text: input.value, liked: false, likeSum: 0 });
+      input.value = "";
       renderComments();
     });
 
-    // Первоначальная отрисовка списка комментариев
     renderComments();
   </script>
 </body>
-</html> 
+</html>
