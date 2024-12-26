@@ -46,6 +46,7 @@ export const renderComments = () => {
     }
   
   
+    const text = document.getElementById("text-input");
     const commentsElements = document.querySelectorAll(".comment");
   
     for (const commentElement of commentsElements) {

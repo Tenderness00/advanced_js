@@ -1,13 +1,9 @@
 import {renderComments} from "./modules/renderComments.js";
 import { comments } from "./modules/comments.js";
+import { sanitizeHtml } from "./modules/replace.js";
 
 renderComments();
-
-const sanitizeHtml = (value) => {
-    return value.replaceAll("<", "&lt;").replaceAll(">","&gt;");
-  }
-  
-  const name = document.getElementById("name-input");
+const name = document.getElementById("name-input");
 const text = document.getElementById("text-input");
   const addButton = document.querySelector(".add-form-button");
   
@@ -16,7 +12,7 @@ const text = document.getElementById("text-input");
       console.error("Заполните форму");
       return;
     }
-  
+    
     const newComment = {
       name: sanitizeHtml(name.value),
       date: new Date(),
