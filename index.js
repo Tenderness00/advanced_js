@@ -2,6 +2,7 @@ import {renderComments} from "./modules/renderComments.js";
 import { comments } from "./modules/comments.js";
 import { sanitizeHtml } from "./modules/replace.js";
 
+
 renderComments();
 const name = document.getElementById("name-input");
 const text = document.getElementById("text-input");
