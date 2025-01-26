@@ -1,7 +1,12 @@
 import {renderComments} from "./modules/renderComments.js";
-import { comments } from "./modules/comments.js";
+import { comments, updateComments } from "./modules/comments.js";
 import { sanitizeHtml } from "./modules/replace.js";
+import {fetchComments} from "./modules/api.js";
 
+fetchComments().then((data) => {
+  updateComments(data)
+  renderComments()
+})
 
 renderComments();
 const name = document.getElementById("name-input");
