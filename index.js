@@ -1,5 +1,6 @@
 import {renderComments} from "./modules/renderComments.js";
-import { comments, updateComments } from "./modules/comments.js";
+import {postComment} from "./modules/api.js";
+import { updateComments } from "./modules/comments.js";
 import { sanitizeHtml } from "./modules/replace.js";
 import {fetchComments} from "./modules/api.js";
 
@@ -16,23 +17,18 @@ const text = document.getElementById("text-input");
   addButton.addEventListener("click", () => {
     if (!name.value || !text.value) {
       console.error("Заполните форму");
-      return;
+      return
     }
-    
-    const newComment = {
-      name: sanitizeHtml(name.value),
-      date: new Date(),
-      text: sanitizeHtml(text.value),
-      likes: 0,
-      isLiked: false,
-    }
+
+    postComment(sanitizeHtml(text.value), sanitizeHtml(name.value)).then(
+        (data) => {
+          updateComments(data)
+          renderComments()
+          name.value = "";
+          text.value = "";
+        },
+      )
   
-    comments.push(newComment);
-  
-    renderComments();
-  
-    name.value = "";
-    text.value = "";
   });
 
 
