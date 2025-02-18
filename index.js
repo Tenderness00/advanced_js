@@ -37,7 +37,30 @@ const text = document.getElementById("text-input");
           name.value = "";
           text.value = "";
         },
-      )
+      ).catch((error) => {
+          document.querySelector('.form-loading').style.display = 'none'
+          document.querySelector(".add-form-button").style.display = 'flex'
+
+          if (error.message === "Failed to fetch") {
+            alert("Интернет не подключен, попробуйте снова")
+          }
+
+          if(error.message === "Ошибка сервера") {
+            alert("Ошибка сервера")
+          }
+
+          if (error.message === "Неверный запрос") {
+            alert("Имя и комментарий должны быть не короче 3-х символов")
+
+            name.classList.add("-error")
+            text.classList.add("-error")
+
+            setTimeout(() => {
+              name.classList.remove("-error")
+              text.classList.remove("-error")  
+            },2000)
+          }
+      })
   
   });
 
