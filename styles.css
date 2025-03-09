@@ -144,3 +144,7 @@ body {
   .-error {
     border: 1px solid red;
   }
+
+  .comment-list {
+    gap: 100px;
+  }

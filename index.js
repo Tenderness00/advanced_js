@@ -3,10 +3,15 @@ import {postComment} from "./modules/api.js";
 import { updateComments } from "./modules/comments.js";
 import { sanitizeHtml } from "./modules/replace.js";
 import {fetchComments} from "./modules/api.js";
+import { renderLogin } from "./modules/renderLogin.js";
+// import { renderRegistration } from "./modules/renderRegistration.js";
 
-document.querySelector(".comments").innerHTML =
+// В index.js импортируются все js модули
+
+document.getElementById("app").innerHTML =
  "Загружаю комментарии, пожалуйста, подождите..."
 
+//  // Обновление и рендер комментариев
 fetchComments().then((data) => {
   updateComments(data)
   renderComments()
@@ -15,7 +20,7 @@ fetchComments().then((data) => {
 const name = document.getElementById("name-input");
 const text = document.getElementById("text-input");
   const addButton = document.querySelector(".add-form-button");
-  
+//   // Проверка на пустые поля комментария при POST запросе
   addButton.addEventListener("click", () => {
     if (!name.value || !text.value) {
       console.error("Заполните форму");
@@ -27,6 +32,7 @@ const text = document.getElementById("text-input");
 
     text.value = sanitizeHtml(text.value);
 
+//     // Функция создания комментария POST запросом
     postComment(sanitizeHtml(text.value), sanitizeHtml(name.value)).then(
         (data) => {
           document.querySelector('.form-loading').style.display = 'none'
@@ -40,13 +46,18 @@ const text = document.getElementById("text-input");
       ).catch((error) => {
           document.querySelector('.form-loading').style.display = 'none'
           document.querySelector(".add-form-button").style.display = 'flex'
+          console.log(error)
 
           if (error.message === "Failed to fetch") {
             alert("Интернет не подключен, попробуйте снова")
           }
 
-          if(error.message === "Ошибка сервера") {
+          if (error.message === "Ошибка сервера") {
             alert("Ошибка сервера")
+          }
+
+          if (error.message === "Пользователь не авторизирован") {
+            renderLogin()
           }
 
           if (error.message === "Неверный запрос") {
@@ -62,6 +73,4 @@ const text = document.getElementById("text-input");
           }
       })
   
-  });
-
-
+  })
